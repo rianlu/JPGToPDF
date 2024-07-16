@@ -15,7 +15,15 @@ function handleFileSelect(event) {
             const img = document.createElement('img');
             img.src = e.target.result;
 
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.innerHTML = '&times;';
+            deleteBtn.onclick = () => {
+                div.remove(); // 删除图片
+            };
+
             div.appendChild(img);
+            div.appendChild(deleteBtn);
             imageContainer.appendChild(div);
         };
         reader.readAsDataURL(file);
@@ -97,3 +105,25 @@ function setLanguage(lang) {
 
 // Set default language to English
 setLanguage('en');
+
+// Modal functionality
+const modalContainer = document.getElementById('modal-container');
+const modalImg = document.getElementById('modal-img');
+const closeModal = document.getElementsByClassName('close')[0];
+
+document.getElementById('image-container').addEventListener('click', function(e) {
+    if (e.target.tagName === 'IMG') {
+        modalImg.src = e.target.src;
+        modalContainer.style.display = 'flex';
+    }
+});
+
+closeModal.onclick = function() {
+    modalContainer.style.display = 'none';
+};
+
+window.onclick = function(event) {
+    if (event.target === modalContainer) {
+        modalContainer.style.display = 'none';
+    }
+};

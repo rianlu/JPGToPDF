@@ -13,8 +13,9 @@ body {
     color: #fff;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    overflow-x: hidden; /* Prevent horizontal scrollbar */
 }
 
 @keyframes gradientBG {
@@ -49,6 +50,29 @@ body {
     background-color: #1b85b8;
 }
 
+.top-bar {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative; /* Ensure z-index works */
+    z-index: 1; /* Ensure it's above body background */
+}
+
+.top-bar-left {
+    display: flex;
+    align-items: center;
+}
+
+h1 {
+    margin-top: 20px;
+    font-size: 2em;
+    color: #333;
+}
+
 .container {
     max-width: 800px;
     margin: 20px;
@@ -57,18 +81,12 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     color: #333;
-}
-
-h1 {
-    margin-bottom: 20px;
-    font-size: 2em;
-    color: #333;
+    position: relative; /* Ensure z-index works */
+    z-index: 0; /* Ensure it's behind top-bar */
 }
 
 .custom-file-input, .custom-select, .custom-button {
-    display: block;
-    width: calc(100% - 40px);
-    margin: 10px auto;
+    margin-right: 10px;
     padding: 10px;
     border: none;
     border-radius: 5px;
@@ -76,8 +94,38 @@ h1 {
 }
 
 .custom-file-input {
-    background-color: #eee;
+    background-color: #23a6d5;
+    color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    outline: none; /* Remove default focus outline */
+}
+
+.custom-file-input:hover {
+    background-color: #1b85b8;
+}
+
+.custom-file-input:focus {
+    background-color: #1b85b8; /* Change background color on focus */
+}
+
+.custom-file-input::file-selector-button {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-input::file-selector-button:hover {
+    background-color: #1b85b8;
+}
+
+.custom-file-input::file-selector-button:focus {
+    background-color: #1b85b8; /* Change background color on focus */
 }
 
 .custom-select {
@@ -101,10 +149,12 @@ h1 {
     flex-wrap: wrap;
     justify-content: center;
     gap: 16px;
+    margin-top: 20px;
 }
 
 .image-item {
-    width: 23%;
+    position: relative;
+    width: calc(25% - 16px); /* Adjust width here */
     border-radius: 8px;
     overflow: hidden;
     cursor: move;
@@ -121,4 +171,58 @@ h1 {
     width: 100%;
     height: auto;
     display: block;
+}
+
+.image-item .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.image-item .delete-btn:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Modal styles */
+.modal-container {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 80%;
+    max-height: 80%;
+}
+
+.close {
+    color: #ccc;
+    font-size: 30px;
+    font-weight: bold;
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    cursor: pointer;
+}
+.close:hover,
+.close:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
 }
