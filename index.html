@@ -3,68 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image to PDF</title>
+    <title>Image Upload and Sort</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <h1>Convert Images to PDF</h1>
-    <input type="file" id="file-input" multiple accept="image/*">
-    <label for="orientation">Orientation:</label>
-    <select id="orientation">
-        <option value="p">Portrait</option>
-        <option value="l">Landscape</option>
-    </select>
-    <button onclick="generatePDF()">Generate PDF</button>
-    <script>
-        async function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const input = document.getElementById('file-input');
-            const files = input.files;
-            const orientation = document.getElementById('orientation').value;
-            const pdf = new jsPDF({ orientation: orientation });
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const imgData = await readFileAsDataURL(file);
-                const img = new Image();
-                img.src = imgData;
-
-                await new Promise(resolve => {
-                    img.onload = () => {
-                        const pdfWidth = pdf.internal.pageSize.getWidth();
-                        const pdfHeight = pdf.internal.pageSize.getHeight();
-
-                        // 计算图片的缩放比例
-                        const imgWidth = img.width;
-                        const imgHeight = img.height;
-                        const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-
-                        const width = imgWidth * ratio;
-                        const height = imgHeight * ratio;
-
-                        const x = (pdfWidth - width) / 2;
-                        const y = (pdfHeight - height) / 2;
-
-                        if (i > 0) {
-                            pdf.addPage();
-                        }
-                        pdf.addImage(img, 'JPEG', x, y, width, height);
-                        resolve();
-                    };
-                });
-            }
-
-            pdf.save('output.pdf');
-        }
-
-        function readFileAsDataURL(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-    </script>
+    <div class="language-switcher">
+        <select id="language-select" onchange="setLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="zh">中文</option>
+        </select>
+    </div>
+    <div class="container">
+        <h1 data-lang="title">Upload and Sort Images</h1>
+        <input type="file" id="file-input" multiple accept="image/*" class="custom-file-input">
+        <div id="image-container" class="image-container"></div>
+        <label for="orientation" data-lang="orientation">Orientation:</label>
+        <select id="orientation" class="custom-select">
+            <option value="p" data-lang="portrait">Portrait</option>
+            <option value="l" data-lang="landscape">Landscape</option>
+        </select>
+        <button onclick="generatePDF()" class="custom-button" data-lang="generate">Generate PDF</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
